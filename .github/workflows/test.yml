@@ -26,11 +26,9 @@ jobs:
       
       - name: Install npm dependencies
         run: npm install --production
-        if: steps.cache-npm-packages.outputs.cache-hit != 'true'
 
       - name: Install Jest
         run: npm i jest -D
-        if: steps.cache-npm-packages.outputs.cache-hit != 'true'
 
       - name: Run tests using jest
         run: npm test
