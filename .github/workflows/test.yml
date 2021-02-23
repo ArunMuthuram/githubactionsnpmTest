@@ -11,17 +11,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+      
       - name: Install node
         uses: actions/setup-node@v2
         with:
           node-version: '14.15.0'  
       
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
+        id: cache-npm-packages
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+      
       - name: Install npm dependencies
         run: npm install --production
+        if: steps.cache-npm-packages.outputs.cache-hit != 'true'
 
       - name: Install Jest
         run: npm i jest -D
+        if: steps.cache-npm-packages.outputs.cache-hit != 'true'
 
       - name: Run tests using jest
         run: npm test
